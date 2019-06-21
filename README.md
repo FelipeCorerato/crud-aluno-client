@@ -5,7 +5,7 @@
 
 With an Android phone, you can scan this QR code with your Expo mobile app to load this project immediately.
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Project QRCode](https://github.com/FelipeCorerato/crud-alunos-client/blob/master/assets/download.png)
 
 ### Installation
 
