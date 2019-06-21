@@ -20,4 +20,4 @@ or:
 ```
 yarn install
 ```
-Depending on your packege manager.
+Depending on your package manager.
