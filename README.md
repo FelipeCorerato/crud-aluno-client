@@ -7,6 +7,8 @@ With an Android phone, you can scan this QR code with your Expo mobile app to lo
 
 ![Project QRCode](https://github.com/FelipeCorerato/crud-alunos-client/blob/master/assets/download.png)
 
+Or you can just follow this link https://expo.io/@fcorerato/crud-aluno-client and open on you iOS Expo App.
+
 ### Installation
 
 You need to have Node installed and then run this command in the project folder:
