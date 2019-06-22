@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 import api from '../services/api';
 
 export default class Cadastrar extends React.Component {
@@ -11,6 +11,33 @@ export default class Cadastrar extends React.Component {
 
     static navigationOptions = {
         headerTitle: 'Cadastrar aluno'
+    }
+
+    getAluno = async (ra) => {
+        const response = await api.get(`/alunos/${ra}`);
+
+        return response.data;
+    }
+
+    existeAluno = async (ra) => {
+        const response = await api.get(`/alunos/${ra}`);
+        const aluno = response.data;
+
+        if (aluno.length == 0)
+            return false;
+
+        return true;
+    }
+
+    handleAtualizar = async (novoAluno) => {
+        Keyboard.dismiss();
+        await this.props.navigation.navigate('Principal');
+
+        await this.props.navigation.navigate('Atualizar', { 
+            ra: novoAluno.ra,
+            nome: novoAluno.nome,
+            email: novoAluno.email
+        })
     }
 
     handleSubmit = async () => {
@@ -25,15 +52,21 @@ export default class Cadastrar extends React.Component {
             email: this.state.email
         }
 
+        if (await this.existeAluno(novoAluno.ra)) {
+            Alert.alert('RA já cadastrado', 'Deseja atualizar os dados deste aluno?', [
+                { 
+                    text: 'Sim',
+                    onPress: () => { this.handleAtualizar(novoAluno) }
+                },
+                { 
+                    text: 'Não' ,
+                    onPress: () => { }
+                }
+            ]);
+            return;
+        }
+
         await api.post('/alunos', novoAluno);
-
-        // const data = new FormData();
-
-        // data.append('ra', this.state.ra);
-        // data.append('nome', this.state.nome);
-        // data.append('email', this.state.email);
-
-        // await api.post('alunos', data);
 
         this.props.navigation.navigate('Principal');
     }

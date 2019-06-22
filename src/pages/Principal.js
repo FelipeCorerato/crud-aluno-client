@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { Swipeout } from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/Ionicons';
+import ActionButton from 'react-native-action-button';
 import * as Progress from 'react-native-progress';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 import io from 'socket.io-client';
 import api from '../services/api';
 
-import FloatingActionButton from '../components/FloatingActionButton';
 import MySeachBar from '../components/SearchBar';
 
 export default class Principal extends React.Component {
@@ -58,16 +60,6 @@ export default class Principal extends React.Component {
             }
             this.listarAlunos();
         });
-
-        // socket.on('post', newPost => {
-        //     this.setState({ feed: [newPost, ...this.state.feed] });
-        // });
-
-        // socket.on('like', likedPost => {
-        //     this.setState({
-        //         feed: this.state.feed.map(post => post._id === likedPost._id ? likedPost : post)
-        //     });
-        // });
     }
 
     listarAlunos = async () => {
@@ -121,6 +113,14 @@ export default class Principal extends React.Component {
                     )
                 )}
 
+                { this.state.alunos.length != 0 && this.state.feed.length == 0 && this.state.carregando == false &&  (
+                    this.state.conectado && (
+                        <View style={styles.message}>
+                            <Text style={styles.messageText}>Nenhum resultado!</Text>
+                        </View>
+                    )
+                )}
+
                 { this.state.carregando == true && (
                     <View style={styles.progressBar}>
                         <Progress.Circle size={25} indeterminate={true} />
@@ -130,17 +130,23 @@ export default class Principal extends React.Component {
                 <FlatList style={{backgroundColor: '#f3f3f3'}} data={this.state.feed} keyExtractor={aluno => aluno._id} renderItem={({ item }) => (
                     <View style={styles.alunoItem}>
                         <View style={styles.alunoItemInfo}>
-                            <Text style={styles.nome}>{item.nome} - {item.ra}</Text>
-                            <Text style={styles.email}>{item.email}</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Atualizar', { 
+                                ra: item.ra,
+                                nome: item.nome,
+                                email: item.email
+                            })}>
+                                <Text style={styles.nome}>{item.nome} - {item.ra}</Text>
+                                <Text style={styles.email}>{item.email}</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.actions}>
-                            <TouchableOpacity style={styles.action} onPress={() => this.props.navigation.navigate('Atualizar', { 
+                            {/* <TouchableOpacity style={styles.action} onPress={() => this.props.navigation.navigate('Atualizar', { 
                                 ra: item.ra,
                                 nome: item.nome,
                                 email: item.email
                             })}>
                                 <Icon name="md-create" style={{fontSize: 28, height: 28, color: '#3498db', marginRight: 2}} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
                             <TouchableOpacity style={styles.action} 
                                 onPress={() => Alert.alert(
@@ -150,18 +156,14 @@ export default class Principal extends React.Component {
                                         {text: 'Cancelar'},
                                         {text: 'Remover', onPress: () => this.handleDeleteButton(item.ra)}
                                     ] 
-                                )} >
+                                )}>
                                 <Icon name="md-trash" style={{fontSize: 30, height: 30, color: 'rgba(231,76,60,1)', marginRight: 2}} />
                             </TouchableOpacity>
                         </View>
                     </View>
                 )} />
 
-                {/* { this.state.alunos.map(aluno => (
-                    <Text key={aluno.ra}>{aluno.nome}</Text>
-                )) } */}
-
-                <FloatingActionButton style={styles.actionButton} navigation={this.props.navigation} />
+                <ActionButton style={{ marginRight: 9 }} buttonColor="rgba(231,76,60,1)" onPress={() => this.props.navigation.navigate('Cadastrar')} />
             </View>
         );
     }
@@ -170,7 +172,8 @@ export default class Principal extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f3f3f3'
+        backgroundColor: '#f3f3f3',
+        paddingBottom: getBottomSpace()
     },
 
     progressBar: {
@@ -194,7 +197,8 @@ const styles = StyleSheet.create({
     alunoItemInfo: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        width: '90%',
+        justifyContent: 'center'
     },
 
     ra: {
@@ -239,8 +243,8 @@ const styles = StyleSheet.create({
         flex:1, 
         backgroundColor: '#f3f3f3',
         position: 'relative',
-        // left: 40,
-        // bottom: 120,
+        paddingBottom: 120,
+        paddingLeft: 90,
         display: 'flex',
         zIndex: 99999
     }
