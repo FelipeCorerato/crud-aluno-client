@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/splash2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#f3f3f3"
+      "backgroundColor": "#fff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -25,6 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "An application to create, update, delete and search students. This is a React Ntive client to a NodeJS Restful API using mongoose and express.",
+    "githubUrl": "https://github.com/FelipeCorerato/crud-alunos-client"
   }
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { Swipeout } from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionButton from 'react-native-action-button';
 import * as Progress from 'react-native-progress';
@@ -140,14 +139,6 @@ export default class Principal extends React.Component {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.actions}>
-                            {/* <TouchableOpacity style={styles.action} onPress={() => this.props.navigation.navigate('Atualizar', { 
-                                ra: item.ra,
-                                nome: item.nome,
-                                email: item.email
-                            })}>
-                                <Icon name="md-create" style={{fontSize: 28, height: 28, color: '#3498db', marginRight: 2}} />
-                            </TouchableOpacity> */}
-
                             <TouchableOpacity style={styles.action} 
                                 onPress={() => Alert.alert(
                                     'Deseja remover o aluno?',
